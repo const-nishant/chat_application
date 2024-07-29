@@ -8,6 +8,8 @@ class Commontextfield extends StatelessWidget {
   final void Function()? onTap;
   final bool readOnly;
   final bool obscureText;
+  final int? maxLength;
+  final Widget? suffixIcon;
   const Commontextfield({
     super.key,
     required this.hintText,
@@ -17,11 +19,14 @@ class Commontextfield extends StatelessWidget {
     this.onTap,
     required this.readOnly,
     required this.obscureText,
+    this.maxLength,
+    this.suffixIcon,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLength: maxLength,
       obscureText: obscureText,
       onTap: onTap,
       controller: controller,
@@ -29,6 +34,8 @@ class Commontextfield extends StatelessWidget {
       validator: validator,
       readOnly: readOnly,
       decoration: InputDecoration(
+        suffixIcon: suffixIcon,
+        counterText: "",
         enabledBorder: OutlineInputBorder(
           borderRadius: const BorderRadius.all(Radius.circular(16)),
           borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),

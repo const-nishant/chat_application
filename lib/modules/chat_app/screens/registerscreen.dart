@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../exports.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -16,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final usernametextcontroller = TextEditingController();
   final phonetextcontroller = TextEditingController();
   final emailtextcontroller = TextEditingController();
   final passwordtextcontroller = TextEditingController();
@@ -31,18 +30,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await authServices.registerWithEmailandPassword(
           emailtextcontroller.text,
           passwordtextcontroller.text,
+          phonetextcontroller.text,
+          usernametextcontroller.text,
         );
-
-        // Create user document
-        final currentUser = FirebaseAuth.instance.currentUser;
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(currentUser!.uid)
-            .set({
-          'uid': currentUser.uid,
-          'email': emailtextcontroller.text,
-          'phone': phonetextcontroller.text,
-        });
       } on FirebaseAuthException catch (e) {
         showDialog(
           // ignore: use_build_context_synchronously
@@ -89,6 +79,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                //username textfield
+                Commontextfield(
+                  controller: usernametextcontroller,
+                  readOnly: false,
+                  obscureText: false,
+                  hintText: "Username",
+                ),
+                const SizedBox(height: 20),
                 //email textfield
                 Commontextfield(
                   controller: emailtextcontroller,
@@ -103,6 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   readOnly: false,
                   obscureText: false,
                   hintText: "Phone Number",
+                  maxLength: 10,
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
