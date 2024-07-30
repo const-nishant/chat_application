@@ -30,7 +30,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+# hide the /lib/firebase_options.dart file 
 /lib/firebase_options.dart
+
 
 # Symbolication related
 app.*.symbols
