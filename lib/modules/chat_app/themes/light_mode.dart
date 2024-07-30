@@ -8,7 +8,4 @@ ThemeData lightTheme = ThemeData(
     tertiary: Colors.white,
     inversePrimary: Colors.grey.shade900,
   ),
-  drawerTheme: DrawerThemeData(
-    scrimColor: Colors.black.withOpacity(0.5),
-  )
 );

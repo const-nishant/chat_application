@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import '../exports.dart';
 
 class Messagelist extends StatelessWidget {
+  final ScrollController scrollController;
   final String receiverID;
-  const Messagelist({super.key, required this.receiverID});
+  const Messagelist({
+    super.key,
+    required this.receiverID,
+    required this.scrollController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +35,7 @@ class Messagelist extends StatelessWidget {
           //return message list
           else {
             return ListView(
+              controller: scrollController,
               children: snapshot.data!.docs
                   .map((doc) => _buildMessageListItem(doc))
                   .toList(),
@@ -54,6 +60,8 @@ class Messagelist extends StatelessWidget {
           isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         ChatBubble(
+          messageId: doc.id,
+          userID: data['senderID'],
           message: data['message'],
           isCurrentUser: isCurrentUser,
         ),

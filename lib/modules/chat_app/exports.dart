@@ -5,12 +5,14 @@ export 'screens/homepage.dart';
 export 'screens/profilescreen.dart';
 export 'screens/settingscreen.dart';
 export 'screens/chatscreen.dart';
+export 'screens/blocked_users.dart';
 //widgets
 export 'widgets/userlist.dart';
 export 'widgets/messagelist.dart';
 //themes
 export 'themes/light_mode.dart';
 export 'themes/dark_mode.dart';
+export 'themes/theme_provider.dart';
 //constants
 export 'constants/commontextfield.dart';
 export 'constants/large_buttons.dart';

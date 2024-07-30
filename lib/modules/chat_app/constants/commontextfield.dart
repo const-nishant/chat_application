@@ -10,6 +10,7 @@ class Commontextfield extends StatelessWidget {
   final bool obscureText;
   final int? maxLength;
   final Widget? suffixIcon;
+  final FocusNode? focusNode;
   const Commontextfield({
     super.key,
     required this.hintText,
@@ -20,12 +21,13 @@ class Commontextfield extends StatelessWidget {
     required this.readOnly,
     required this.obscureText,
     this.maxLength,
-    this.suffixIcon,
+    this.suffixIcon, this.focusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode,
       maxLength: maxLength,
       obscureText: obscureText,
       onTap: onTap,

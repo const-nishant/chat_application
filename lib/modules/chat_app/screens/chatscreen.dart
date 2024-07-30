@@ -22,6 +22,45 @@ class _ChatScreenState extends State<ChatScreen> {
   // final Authservices _auth = Authservices();
   final Chatservices _chatservices = Chatservices();
 
+  //for textfield scroll
+
+  FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    //add listner to focus node
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        //cause a delay so that the keyboard has time to show up
+        //then the amount of remaining space is calculated
+        //then scroll down
+        Future.delayed(const Duration(milliseconds: 500), () => scrolldown());
+      }
+    });
+    //wait a bit for the list view to be built, then scrolldown
+    Future.delayed(const Duration(milliseconds: 500), () => scrolldown());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    focusNode.dispose();
+    messagecontroller.dispose();
+  }
+
+//scroll controller
+  final ScrollController _scrollController = ScrollController();
+
+  void scrolldown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   //send message
   void sendmessage() async {
     //if message is not empty
@@ -31,26 +70,28 @@ class _ChatScreenState extends State<ChatScreen> {
           widget.receiverID, messagecontroller.text);
       //clear message
       messagecontroller.clear();
+
+      //scrolldown
+      scrolldown();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.chevron_left),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        iconTheme:
-            IconThemeData(color: Theme.of(context).colorScheme.secondary),
         title: Text(
           widget.username,
-          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
         centerTitle: true,
       ),
@@ -58,7 +99,10 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           //message list
           Expanded(
-            child: Messagelist(receiverID: widget.receiverID),
+            child: Messagelist(
+              receiverID: widget.receiverID,
+              scrollController: _scrollController,
+            ),
           ),
           //textfield
           _buildsendmessage(),
@@ -74,6 +118,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: Commontextfield(
+                focusNode: focusNode,
                 hintText: "Message",
                 controller: messagecontroller,
                 readOnly: false,
@@ -88,9 +133,9 @@ class _ChatScreenState extends State<ChatScreen> {
               // margin: EdgeInsets.only(right: 12),
               child: IconButton(
                 onPressed: sendmessage,
-                icon:  Icon(
+                icon: const Icon(
                   Icons.send,
-                  color:Theme.of(context).colorScheme.tertiary,
+                  color: Colors.white,
                 ),
               ),
             ),

@@ -19,14 +19,14 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        iconTheme:
-            IconThemeData(color: Theme.of(context).colorScheme.secondary),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey,
         title: const Text(
           'Home',
           style: TextStyle(
-            color: Colors.white,
-          ),
+              // color: Colors.white,
+              ),
         ),
         actions: [
           IconButton(

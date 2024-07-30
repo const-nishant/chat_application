@@ -14,14 +14,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme:
-            IconThemeData(color: Theme.of(context).colorScheme.secondary),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey,
         title: const Text(
           'Profile',
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
         centerTitle: true,
       ),
