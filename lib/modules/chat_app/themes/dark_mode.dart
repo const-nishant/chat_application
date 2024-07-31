@@ -8,4 +8,13 @@ ThemeData darkTheme = ThemeData(
     tertiary: const Color.fromARGB(255, 57, 57, 57),
     inversePrimary: Colors.grey.shade300,
   ),
+  dialogTheme: DialogTheme(
+    titleTextStyle: TextStyle(
+      color: Colors.grey.shade600,
+    ),
+    contentTextStyle: TextStyle(
+      color: Colors.grey.shade600,
+    ),
+    backgroundColor: Colors.grey.shade900,
+  ),
 );

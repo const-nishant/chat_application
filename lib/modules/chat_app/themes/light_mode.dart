@@ -8,4 +8,17 @@ ThemeData lightTheme = ThemeData(
     tertiary: Colors.white,
     inversePrimary: Colors.grey.shade900,
   ),
+  dialogTheme: DialogTheme(
+    titleTextStyle: TextStyle(
+      color: Colors.grey.shade500,
+    ),
+    contentTextStyle: TextStyle(
+      color: Colors.grey.shade500,
+    ),
+  ),
+  iconButtonTheme: const IconButtonThemeData(
+    style: ButtonStyle(
+      iconColor: WidgetStatePropertyAll(Colors.white),
+    ),
+  ),
 );

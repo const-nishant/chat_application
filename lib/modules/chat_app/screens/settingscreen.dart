@@ -72,12 +72,8 @@ class _SettingScreenState extends State<SettingScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     //blocked users
-                    Text(
+                    const Text(
                       "Blocked Users",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
                     ),
 
                     //button to show blocked users

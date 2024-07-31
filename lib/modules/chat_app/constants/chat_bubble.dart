@@ -39,6 +39,9 @@ class ChatBubble extends StatelessWidget {
                   leading: const Icon(Icons.block),
                   title: const Text('Block User'),
                   onTap: () {
+                    //pop the dialog
+                    Navigator.pop(context);
+                    //pop the screen
                     Navigator.pop(context);
                     //block user
                     blockUser(context, userID);
