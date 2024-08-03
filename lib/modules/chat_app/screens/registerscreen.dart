@@ -14,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final formkey = GlobalKey<FormState>();
   final usernametextcontroller = TextEditingController();
   final phonetextcontroller = TextEditingController();
   final emailtextcontroller = TextEditingController();
@@ -25,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final authServices = Authservices();
 
     // Try register
-    if (passwordtextcontroller.text == confirmpasswordtextcontroller.text) {
+    if (formkey.currentState!.validate()) {
       try {
         await authServices.registerWithEmailandPassword(
           emailtextcontroller.text,
@@ -42,13 +43,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         );
       }
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => const AlertDialog(
-          title: Text("Password does not match"),
-        ),
-      );
     }
   }
 
@@ -56,108 +50,146 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //logo
-                Icon(
-                  Icons.message,
-                  size: 60,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(height: 20),
-                //welcome back message
-                Text(
-                  "Welcome back!",
-                  style: TextStyle(
+      body: Form(
+        key: formkey,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //logo
+                  Icon(
+                    Icons.message,
+                    size: 60,
                     color: Theme.of(context).colorScheme.primary,
-                    fontSize: 24,
                   ),
-                ),
-                const SizedBox(height: 20),
-                //username textfield
-                Commontextfield(
-                  controller: usernametextcontroller,
-                  readOnly: false,
-                  obscureText: false,
-                  hintText: "Username",
-                ),
-                const SizedBox(height: 20),
-                //email textfield
-                Commontextfield(
-                  controller: emailtextcontroller,
-                  readOnly: false,
-                  obscureText: false,
-                  hintText: "Email",
-                ),
-                const SizedBox(height: 20),
-                //phone textfield
-                Commontextfield(
-                  controller: phonetextcontroller,
-                  readOnly: false,
-                  obscureText: false,
-                  hintText: "Phone Number",
-                  maxLength: 10,
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 20),
-                //password textfield
-                Commontextfield(
-                  controller: passwordtextcontroller,
-                  readOnly: false,
-                  obscureText: true,
-                  hintText: "Password",
-                ),
-                const SizedBox(height: 20),
-                //confirm password textfield
-                Commontextfield(
-                  controller: confirmpasswordtextcontroller,
-                  readOnly: false,
-                  obscureText: true,
-                  hintText: "Confirm Password",
-                ),
-                const SizedBox(height: 20),
-                //register button
-                LargeButtons(
-                  text: "Sign Up",
-                  bordercolor: Theme.of(context).colorScheme.primary,
-                  textcolor: Theme.of(context).colorScheme.primary,
-                  backgroundcolor: Theme.of(context).colorScheme.secondary,
-                  onPressed: () => register(context),
-                ),
-
-                const SizedBox(height: 20),
-
-                //already have an account
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Already have an account?",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                  const SizedBox(height: 20),
+                  //welcome back message
+                  Text(
+                    "Welcome back!",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 24,
                     ),
-                    TextButton(
-                      onPressed: widget.onPressed,
-                      child: Text(
-                        "Login now",
+                  ),
+                  const SizedBox(height: 20),
+                  //username textfield
+                  Commontextfield(
+                    controller: usernametextcontroller,
+                    readOnly: false,
+                    obscureText: false,
+                    hintText: "Username",
+                    maxLength: 10,
+                    keyboardType: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter username';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  //email textfield
+                  Commontextfield(
+                    controller: emailtextcontroller,
+                    readOnly: false,
+                    obscureText: false,
+                    hintText: "Email",
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  //phone textfield
+                  Commontextfield(
+                    controller: phonetextcontroller,
+                    readOnly: false,
+                    obscureText: false,
+                    hintText: "Phone Number",
+                    maxLength: 10,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your phone number';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  //password textfield
+                  Commontextfield(
+                    controller: passwordtextcontroller,
+                    readOnly: false,
+                    obscureText: true,
+                    hintText: "Password",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  //confirm password textfield
+                  Commontextfield(
+                    controller: confirmpasswordtextcontroller,
+                    readOnly: false,
+                    obscureText: true,
+                    hintText: "Confirm Password",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      } else if (value != passwordtextcontroller.text) {
+                        return 'Password does not match';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  //register button
+                  LargeButtons(
+                    text: "Sign Up",
+                    bordercolor: Theme.of(context).colorScheme.primary,
+                    textcolor: Theme.of(context).colorScheme.primary,
+                    backgroundcolor: Theme.of(context).colorScheme.secondary,
+                    onPressed: () => register(context),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  //already have an account
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already have an account?",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
-                          fontSize: 14,
-                          decoration: TextDecoration.underline,
-                          decorationColor:
-                              Theme.of(context).colorScheme.primary,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      TextButton(
+                        onPressed: widget.onPressed,
+                        child: Text(
+                          "Login now",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 14,
+                            decoration: TextDecoration.underline,
+                            decorationColor:
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

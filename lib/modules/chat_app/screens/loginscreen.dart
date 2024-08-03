@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final formkey = GlobalKey<FormState>();
   final emailtextcontroller = TextEditingController();
   final passwordtextcontroller = TextEditingController();
 
@@ -22,19 +23,21 @@ class _LoginScreenState extends State<LoginScreen> {
     final authservices = Authservices();
 
     //try login
-    try {
-      await authservices.signInWithEmailandPassword(
-        emailtextcontroller.text,
-        passwordtextcontroller.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      showDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(e.code),
-        ),
-      );
+    if (formkey.currentState!.validate()) {
+      try {
+        await authservices.signInWithEmailandPassword(
+          emailtextcontroller.text,
+          passwordtextcontroller.text,
+        );
+      } on FirebaseAuthException catch (e) {
+        showDialog(
+          // ignore: use_build_context_synchronously
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(e.code),
+          ),
+        );
+      }
     }
   }
 
@@ -42,101 +45,124 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //logo
-              Icon(
-                Icons.message,
-                size: 60,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(height: 20),
-              //welcome back message
-              Text(
-                "Welcome back!",
-                style: TextStyle(
+      body: Form(
+        key: formkey,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //logo
+                Icon(
+                  Icons.message,
+                  size: 60,
                   color: Theme.of(context).colorScheme.primary,
-                  fontSize: 24,
                 ),
-              ),
-        
-              const SizedBox(height: 20),
-              //email textfield
-              Commontextfield(
-                obscureText: false,
-                hintText: "Email",
-                controller: emailtextcontroller,
-                readOnly: false,
-              ),
-        
-              const SizedBox(height: 18),
-              //password textfield
-              Commontextfield(
-                obscureText: true,
-                hintText: "Password",
-                controller: passwordtextcontroller,
-                readOnly: false,
-                keyboardType: TextInputType.visiblePassword,
-              ),
-        
-              const SizedBox(height: 14),
-              //forgot password
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text(
-                      "Forgot password ?",
+                const SizedBox(height: 20),
+                //welcome back message
+                Text(
+                  "Welcome back!",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 24,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+                //email textfield
+                Commontextfield(
+                  obscureText: false,
+                  hintText: "Email",
+                  controller: emailtextcontroller,
+                  readOnly: false,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    } else if (!value.contains('@')) {
+                      return 'Please enter a valid email';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+
+                const SizedBox(height: 18),
+                //password textfield
+                Commontextfield(
+                  obscureText: true,
+                  hintText: "Password",
+                  controller: passwordtextcontroller,
+                  readOnly: false,
+                  keyboardType: TextInputType.visiblePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    } else if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+
+                const SizedBox(height: 14),
+                //forgot password
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Text(
+                        "Forgot password ?",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                //login button
+                LargeButtons(
+                  onPressed: () => login(context),
+                  text: "Login",
+                  bordercolor: Theme.of(context).colorScheme.primary,
+                  textcolor: Theme.of(context).colorScheme.primary,
+                  backgroundcolor: Theme.of(context).colorScheme.secondary,
+                ),
+
+                const SizedBox(height: 14),
+                //not a member? register now
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Not a member ?",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 14,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              //login button
-              LargeButtons(
-                onPressed: () => login(context),
-                text: "Login",
-                bordercolor: Theme.of(context).colorScheme.primary,
-                textcolor: Theme.of(context).colorScheme.primary,
-                backgroundcolor: Theme.of(context).colorScheme.secondary,
-              ),
-        
-              const SizedBox(height: 14),
-              //not a member? register now
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Not a member ?",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 14,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: widget.onPressed,
-                    child: Text(
-                      "Register now",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Theme.of(context).colorScheme.primary,
-                        fontSize: 14,
+                    TextButton(
+                      onPressed: widget.onPressed,
+                      child: Text(
+                        "Register now",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          decoration: TextDecoration.underline,
+                          decorationColor:
+                              Theme.of(context).colorScheme.primary,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

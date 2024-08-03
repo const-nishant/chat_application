@@ -9,11 +9,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  void logout() {
-    final authServices = Authservices();
-    authServices.logout();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,14 +23,6 @@ class _HomepageState extends State<Homepage> {
               // color: Colors.white,
               ),
         ),
-        actions: [
-          IconButton(
-            onPressed: logout,
-            icon: const Icon(
-              Icons.logout,
-            ),
-          ),
-        ],
         centerTitle: true,
       ),
       drawer: const CommonDrawer(),
