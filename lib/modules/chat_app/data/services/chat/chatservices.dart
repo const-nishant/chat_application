@@ -8,17 +8,6 @@ class Chatservices extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //get current user info
-  Stream<Map<String, dynamic>> getcurrentUserStream() {
-    final String currentUserID = _auth.currentUser!.uid;
-
-    return _firestore
-        .collection('users')
-        .doc(currentUserID)
-        .snapshots()
-        .map((snapshot) => snapshot.data()!);
-  }
-
   //get all user stream
   Stream<List<Map<String, dynamic>>> getuserstream() {
     return _firestore.collection('users').snapshots().map((snapshot) {

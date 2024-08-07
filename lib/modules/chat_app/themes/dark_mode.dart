@@ -17,4 +17,7 @@ ThemeData darkTheme = ThemeData(
     ),
     backgroundColor: Colors.grey.shade900,
   ),
+  iconTheme: IconThemeData(
+    color: Colors.grey.shade200,
+  )
 );

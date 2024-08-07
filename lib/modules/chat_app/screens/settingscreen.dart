@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../exports.dart';
 
@@ -53,9 +54,13 @@ class _SettingScreenState extends State<SettingScreen> {
                           const WidgetStatePropertyAll(Colors.transparent),
                       activeTrackColor: Colors.green,
                       value: Provider.of<ThemeProvider>(context).isDarkMode,
-                      onChanged: (value) =>
-                          Provider.of<ThemeProvider>(context, listen: false)
-                              .toggleTheme(),
+                      onChanged: (value) async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('isDarkMode', value);
+                        // ignore: use_build_context_synchronously
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .toggleTheme();
+                      },
                     ),
                   ],
                 ),
