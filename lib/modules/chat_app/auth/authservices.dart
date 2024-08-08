@@ -46,6 +46,7 @@ class Authservices {
         'username': username,
         'email': email,
         'phone': phone,
+        'profileImage': '',
       });
       return userCredential;
     } on FirebaseAuthException catch (e) {
